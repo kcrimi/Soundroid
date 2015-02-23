@@ -1,0 +1,33 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/songs_list"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="100"
+        />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/player_toolbar"
+        android:background="@color/secondary_color"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_height="@dimen/player_toolbar"
+        android:layout_width="match_parent">
+        <ImageView
+            android:id="@+id/selected_thumbnail"
+            android:background="#FF0000"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size" />
+        <TextView
+            android:id="@+id/selected_title"
+            android:text="@string/hello_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"/>
+        </android.support.v7.widget.Toolbar>
+</LinearLayout>
