@@ -3,6 +3,7 @@ package com.example.kevin.soundroid;
 import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaPlayer;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     private MediaPlayer mMediaPlayer;
     private ImageView mPlayerStateButton;
     private SearchView mSearchView;
+    private List<Track> mPreviousTracks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +110,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         service.getRecentSongs(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()), new Callback<List<Track>>() {
             @Override
             public void success(List<Track> tracks, Response response) {
-                mTracks.clear();
-                mTracks.addAll((tracks));
-                Log.d(TAG, tracks.get(0).getTitle());
-                mAdapter.notifyDataSetChanged();
+               updateTracks(tracks);
             }
 
             @Override
@@ -120,6 +119,13 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             }
         });
     }
+
+    private void updateTracks(List<Track> tracks){
+        mTracks.clear();
+        mTracks.addAll((tracks));
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     private void toggleSongState() {
         if (mMediaPlayer.isPlaying()){
@@ -133,8 +139,18 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG, query);
         mSearchView.clearFocus();
+        SoundCloud.getService().searchSongs(query, new Callback<List<Track>>() {
+            @Override
+            public void success(List<Track> tracks, Response response) {
+                updateTracks(tracks);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        } );
         return true;
     }
 
@@ -162,6 +178,19 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         getMenuInflater().inflate(R.menu.menu_main, menu);
         mSearchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
         mSearchView.setOnQueryTextListener(this);
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.search_view), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                mPreviousTracks = new ArrayList<Track>(mTracks);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                updateTracks(mPreviousTracks);
+                return true;
+            }
+        });
         return true;
     }
 
