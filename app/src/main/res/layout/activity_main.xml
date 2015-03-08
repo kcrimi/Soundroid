@@ -18,31 +18,41 @@
         android:visibility="gone"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_height="@dimen/player_toolbar"
-        android:layout_width="match_parent">
-        <ImageView
-            android:id="@+id/selected_thumbnail"
-            android:layout_width="@dimen/avatar_size"
-            android:layout_height="@dimen/avatar_size" />
-        <TextView
-            android:id="@+id/selected_title"
-            android:text="@string/hello_world"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="8dp"/>
+        android:layout_width="match_parent"
+        >
         <RelativeLayout
-            android:layout_gravity="right"
-            android:layout_width="@dimen/avatar_size"
-            android:layout_height="@dimen/avatar_size">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
             <ImageView
-                android:id="@+id/player_state"
+                android:id="@+id/selected_thumbnail"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"/>
+            <RelativeLayout
+                android:id="@+id/player_control"
+                android:layout_alignParentRight="true"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
+                >
+                <ImageView
+                    android:id="@+id/player_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+                <ProgressBar
+                    android:id="@+id/player_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                </RelativeLayout>
+            <TextView
+                android:id="@+id/selected_title"
+                android:text="@string/hello_world"
+                android:layout_toRightOf="@id/selected_thumbnail"
+                android:layout_toLeftOf="@id/player_control"
+                android:paddingLeft="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-            <ProgressBar
-                android:id="@+id/player_progress"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"/>
             </RelativeLayout>
-
         </android.support.v7.widget.Toolbar>
 </LinearLayout>

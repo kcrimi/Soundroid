@@ -7,15 +7,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import com.example.kevin.soundroid.com.example.kevin.soundroid.soundcloud.SoundCloud;
 import com.example.kevin.soundroid.com.example.kevin.soundroid.soundcloud.SoundCloudService;
 import com.example.kevin.soundroid.com.example.kevin.soundroid.soundcloud.Track;
@@ -40,7 +41,9 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     private TextView mSelectedTitle;
     private ImageView mSelectedThumbnail;
     private MediaPlayer mMediaPlayer;
+    private Toolbar mPlayerToolbar;
     private ImageView mPlayerStateButton;
+    private ProgressBar mProgressBar;
     private SearchView mSearchView;
     private List<Track> mPreviousTracks;
 
@@ -49,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mPlayerToolbar = (Toolbar)findViewById(R.id.player_toolbar);
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -74,6 +78,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
                 toggleSongState();
             }
         });
+        mProgressBar = (ProgressBar)findViewById(R.id.player_progress);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.songs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -88,8 +93,10 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
 
                 if (mMediaPlayer.isPlaying()){
                     mMediaPlayer.stop();
-                    mMediaPlayer.reset();
                 }
+                mMediaPlayer.reset();
+                toggleProgressBar();
+                mPlayerToolbar.setVisibility(View.VISIBLE);
 
                 try {
                     mMediaPlayer.setDataSource(selectedTrack.getStreamURL() + "?client_id=" + SoundCloudService.CLIENT_ID);
@@ -128,7 +135,18 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             mPlayerStateButton.setImageResource(R.drawable.ic_play);
         }else{
             mMediaPlayer.start();
+            toggleProgressBar();
             mPlayerStateButton.setImageResource(R.drawable.ic_pause);
+        }
+    }
+
+    private void toggleProgressBar() {
+        if (mMediaPlayer.isPlaying()){
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mPlayerStateButton.setVisibility(View.VISIBLE);
+        }else{
+            mProgressBar.setVisibility(View.VISIBLE);
+            mPlayerStateButton.setVisibility(View.INVISIBLE);
         }
     }
 
