@@ -1,15 +1,12 @@
 package com.example.kevin.soundroid;
 
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -68,7 +64,6 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             }
         });
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.player_toolbar);
         mSelectedTitle = (TextView)findViewById(R.id.selected_title);
         mSelectedThumbnail = (ImageView)findViewById(R.id.selected_thumbnail);
 
@@ -179,15 +174,21 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         mSearchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
         mSearchView.setOnQueryTextListener(this);
         MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.search_view), new MenuItemCompat.OnActionExpandListener() {
+
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 mPreviousTracks = new ArrayList<Track>(mTracks);
+                mSearchView.setIconified(false);
+                mSearchView.requestFocus();
+                Log.d("expand ", " expand" + mSearchView.isFocused());
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 updateTracks(mPreviousTracks);
+                mSearchView.clearFocus();
+                Log.d("collapse ", " expand" + mSearchView.isFocused());
                 return true;
             }
         });
