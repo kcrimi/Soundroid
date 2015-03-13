@@ -1,5 +1,8 @@
 package com.example.kevin.soundroid;
 
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v4.view.MenuItemCompat;
@@ -79,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             }
         });
         mProgressBar = (ProgressBar)findViewById(R.id.player_progress);
+        mProgressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.songs_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
